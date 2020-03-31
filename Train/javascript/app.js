@@ -118,28 +118,57 @@ var firebaseConfig = {
         database.ref().push({
             trainName: trainName,
             destination: destination,
-            firstTrainTime: firstTrainTime,
             frequency: frequency,
+            nextArrival: nextArrival,
+            minutesAway: minutesAway,
             dateAdded: firebase.database.ServerValue.TIMESTAMP
         });
 
-        database.ref().on("value", function(snapshot) {
-
-            
-            console.log(snapshot.val());
-            console.log(snapshot.val().name);
-            console.log(snapshot.val().email);
-            console.log(snapshot.val().age);
-            console.log(snapshot.val().comment);
       
-      
-           
-          }, function(errorObject) {
-            console.log("Errors handled: " + errorObject.code);
-          });
 
 
     });
+
+    database.ref().on("child_added", function(childSnapshot) {
+
+            
+      console.log(childSnapshot.val());
+      console.log(childSnapshot.val().trainName);
+      console.log(childSnapshot.val().destination);
+      console.log(childSnapshot.val().frequency);
+      console.log(childSnapshot.val().nextArrival);
+      console.log(childSnapshot.val().minutesAway);
+
+
+
+      var firebaseNewRow = $("<tr>")
+
+        var firebaseTableTrainName = $("<td>").text(childSnapshot.val().trainName)
+
+        var firebaseTableDestination = $("<td>").text(childSnapshot.val().destination)
+
+        //var tableFirstTrainTime = $("<td>").text(firstTrainTime)
+
+        var firebaseTableFrequency = $("<td>").text(childSnapshot.val().frequency)
+
+        var firebaseTableNextArrival = $("<td>").text(childSnapshot.val().nextArrival)
+
+        var firebaseTableMinutesAway = $("<td>").text(childSnapshot.val().minutesAway)
+
+        firebaseNewRow.append(firebaseTableTrainName)
+        firebaseNewRow.append(firebaseTableDestination)
+        firebaseNewRow.append(firebaseTableFrequency)
+        firebaseNewRow.append(firebaseTableNextArrival)
+        firebaseNewRow.append(firebaseTableMinutesAway)
+
+        $("#theTable").prepend(firebaseNewRow)
+
+
+     
+    }, function(errorObject) {
+      console.log("Errors handled: " + errorObject.code);
+    });
+
 
 
  
